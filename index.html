@@ -13,54 +13,61 @@
             font-size: 16px;
         }
 
-        li:not(.active) {
+        tbody tr:not(.active) {
             color: gray;
         }
 
-        .active::before {
+        .active td:first-child::before {
             /*noinspection CssUnresolvedCustomProperty*/
             font: var(--fa-font-solid);
             content: "\f0a4";
-            left: -30px;
+            left: -15px;
             position: absolute;
             margin-top: 6px;
         }
     </style>
 </head>
 <body>
-<div class="position-absolute top-50 start-50 translate-middle">
-    <!--<table>
-        <thead><tr><th>Project</th><th>Projected Work Week</th></tr></thead>
+<div class="position-absolute top-50 start-50 translate-middle" style="width: 32vw;">
+    <p>
+        I have several projects I'm trying to work on. Sometimes, I'm just <a href="https://jonathanpeterson.com/posts/state-of-my-picker.html#way-back-when" target="_blank">sick</a>, or swamped a work. 
+        I hope to update this page so you have some idea of where my efforts are. 
+        At some point, I'd like to add dates around when I expect to work on which project. 
+    </p>
+    <table class="table table-borderless text-light">
+        <thead>
+        <tr>
+            <th>Project</th>
+           <!-- <th>Projected Work Week</th>-->
+        </tr>
+        </thead>
         <tbody>
-        <tr>
-            <td></td>
-            <td></td>
+        <tr id="sick">
+            <td>Sick/Bad Health/Swamped at work</td>
+           <!-- <td></td>-->
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
+        <tr id="td">
+            <td><a href="https://github.com/Eonasdan/tempus-dominus">Tempus Dominus</a></td>
+           <!-- <td></td>-->
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
+        <tr id="blog">
+            <td><a href="https://github.com/Eonasdan/static-site-generator">Blog/Static site generator</a></td>
+            <!--<td></td>-->
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
+        <tr id="sp">
+            <td>Private Project</td>
+          <!--  <td></td>-->
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
+        <tr id="proxy">
+            <td><a href="https://github.com/Eonasdan/web-debugger-proxy">Web Proxy tool</a></td>
+            <!--<td></td>-->
+        </tr>
+        <tr id="other">
+            <td>Other Project</td>
+            <!--<td></td>-->
         </tr>
         </tbody>
-    </table>-->
-    <ul class="list-unstyled">
-        <li id="sick">Sick/Bad Health/Swamped at work <small></small></li>
-        <li id="td">Tempus Dominus <small></small></li>
-        <li id="blog">Blog/Static site generator <small></small></li>
-        <li id="sp">Private Project <small></small></li>
-        <li id="proxy">Web Proxy tool <small></small></li>
-    </ul>
+    </table>
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/solid.min.css"
@@ -73,44 +80,51 @@
         integrity="sha512-KTFpdbCb05CY4l242bLjyaPhoL9vAy4erP1Wkn7Rji0AG6jx6zzGtKkdHc7jUOYOVSmbMbTg728u260CA/Qugg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    const projects = [
-        {name: 'td', factor: 1},
-        {name: 'blog', factor: 2},
-        {name: 'sp', factor: 3},
-        {name: 'proxy', factor: 4}
-    ];
-
-    const current = 'blog';
+    const current = 'sick';
 
     document.getElementById(current).classList.add('active');
 
-    if (current !== 'sick') {
+    /*if (current !== 'sick') {
+        const projects = [
+            'td',
+            'blog',
+            'sp',
+            'proxy'
+        ];
+
         const tdStart = dayjs('2022-01-09');
         const sow = dayjs().startOf('w');
         console.log(sow.diff(tdStart, 'w'))
-        const predict = sow.diff(tdStart, 'w')%4;
-        /*
+        const predict = sow.diff(tdStart, 'w') % 4;
+        /!*
         predict should be used 4-predict = number of weeks till next td
         should be able to loop through projects and guess next work on date
         and if behind
-         */
-        const currentIndex = projects.findIndex(x => x.name === current);
+         *!/
+        const currentIndex = projects.findIndex(x => x === current);
+
+        Array.from(projects.entries()).sort(([ai, a], [bi, b]) => {
+            console.log(a, ai, b, bi)
+            if (ai === currentIndex) return -1
+            if (bi === currentIndex) return -1
+            //return 1;
+            return ai > currentIndex ? -1 : 1
+        })
+
         projects.forEach((project, index) => {
-            if (project.name === current) return;
-            const small = document.getElementById(project.name).getElementsByTagName('small')[0];
-            
-            const startDate = sow.add(predict + (index > currentIndex ? index : projects.length-2), 'w').format('YYYY-MM-DD');
-            
+            if (project === current) return;
+            const small = document.getElementById(project.name).getElementsByTagName('td')[1];
+
+
+            var a = index > currentIndex;
+            var b = a ? index : projects.length - 2;
+            var c = predict + b;
+
+            const startDate = sow.add(predict + (index > currentIndex ? index : projects.length - 2), 'w').format('YYYY-MM-DD');
+
             small.innerText = `${startDate}`;
         });
-        
-        let projectIndex = projects.findIndex(x => x.name === current) + 1;
-        if (projectIndex >= projects.length) projectIndex = 1;
-        const nextProject = projects[projectIndex];
-        const nextWeek = dayjs().startOf('w').add(7, 'd');
-        console.log(tdStart.diff(nextWeek, 'w'))
-        console.log(nextProject)
-    }
+    }*/
 </script>
 </body>
 </html>
